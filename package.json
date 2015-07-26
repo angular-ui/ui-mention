@@ -1,5 +1,5 @@
 {
-  "name": "ui-mention",
+  "name": "angular-ui-mention",
   "version": "0.0.1",
   "description": "Facebook-like @mentions for text inputs built around composability",
   "main": "src/mention.js",
@@ -20,7 +20,7 @@
     "mentions",
     "autocomplete"
   ],
-  "author": "Dean Sofer (ProLoser)",
+  "author": "AngularUI Team",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/angular-ui/ui-mention/issues"
