@@ -1,0 +1,41 @@
+{
+  "name": "ui-mention",
+  "version": "0.0.1",
+  "description": "Facebook-like @mentions for text inputs built around composability",
+  "main": "src/mention.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angular-ui/ui-mention.git"
+  },
+  "keywords": [
+    "angular",
+    "angularjs",
+    "angular.js",
+    "angularui",
+    "angular-ui",
+    "mention",
+    "mentions",
+    "autocomplete"
+  ],
+  "author": "Dean Sofer (ProLoser)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/angular-ui/ui-mention/issues"
+  },
+  "homepage": "https://github.com/angular-ui/ui-mention#readme",
+  "dependencies": {
+    "gulp": "^3.9.0",
+    "gulp-angular-filesort": "^1.1.1",
+    "gulp-babel": "^5.1.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-ext-replace": "^0.2.0",
+    "gulp-load-plugins": "^1.0.0-rc.1",
+    "gulp-sass": "^2.0.4",
+    "gulp-sequence": "^0.4.0",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-uglify": "^1.2.0"
+  }
+}

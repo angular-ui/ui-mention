@@ -1,0 +1,31 @@
+{
+  "name": "ui-mention",
+  "version": "0.0.1",
+  "homepage": "https://github.com/angular-ui/ui-mention",
+  "authors": [
+    "Dean Sofer <proloser@hotmail.com>"
+  ],
+  "description": "Facebook-like @mentions for text inputs built around composability",
+  "main": "src/mention.js",
+  "keywords": [
+    "angular",
+    "angularjs",
+    "angularui",
+    "angular-ui",
+    "angular.js",
+    "mentions",
+    "mention",
+    "autocomplete"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.3"
+  }
+}
