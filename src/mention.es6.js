@@ -1,5 +1,5 @@
 angular.module('ui.mention', [])
-.directive('mention', function($q){
+.directive('mention', function($q, $timeout){
   return {
     require: ['ngModel', 'mention'],
     controllerAs: '$mention',
@@ -22,9 +22,13 @@ angular.module('ui.mention', [])
        * @param  {ngModelController} model
        */
       this.init = function(model) {
+        // Leading whitespace shows up in the textarea but not the preview
+        $attrs.ngTrim = 'false';
+
         ngModel = model;
+
         ngModel.$parsers.push( value => {
-          //
+          // Removes any mentions that aren't used
           this.mentions = this.mentions.filter( mention => {
            if (~value.indexOf(this.label(mention)))
               return value = value.replace(this.label(mention), this.encode(mention));
@@ -34,11 +38,12 @@ angular.module('ui.mention', [])
 
           return value;
         });
+
         ngModel.$formatters.push( (value = '') => {
           // In case the value is a different primitive
           value = value.toString();
 
-          // Removes any mentions that aren't present
+          // Removes any mentions that aren't used
           this.mentions = this.mentions.filter( mention => {
             if (~value.indexOf(this.encode(mention))) {
               value = value.replace(this.encode(mention), this.label(mention));
@@ -50,6 +55,7 @@ angular.module('ui.mention', [])
 
           return value;
         });
+
         ngModel.$render = () => {
           $element.val(ngModel.$viewValue || '');
           this.render();
@@ -105,7 +111,7 @@ angular.module('ui.mention', [])
        * @return {string}              Human-readable string version of choice
        */
       this.label = function(choice) {
-        return choice.first;
+        return `${choice.first} ${choice.last}`;
       };
 
       /**
@@ -237,6 +243,13 @@ angular.module('ui.mention', [])
         this.searching = null;
       };
 
+      this.autogrow = function() {
+        $element[0].style.height = 0; // autoshrink - need accurate scrollHeight
+        let style = getComputedStyle($element[0]);
+        if (style.boxSizing == 'border-box')
+        $element[0].style.height = $element[0].scrollHeight + 'px';
+      };
+
       // Interactions to trigger searching
       $element.on('keyup click focus', event => {
         // If event is fired AFTER activeChoice move is performed
@@ -282,6 +295,10 @@ angular.module('ui.mention', [])
         $scope.$apply();
       });
 
+      // Autogrow is mandatory beacuse the textarea scrolls away from highlights
+      $element.on('input', this.autogrow);
+      // Initialize autogrow height
+      $timeout(this.autogrow, true);
     }
   };
 });

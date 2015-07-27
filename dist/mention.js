@@ -2,7 +2,7 @@
 
 var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
 
-angular.module('ui.mention', []).directive('mention', function ($q) {
+angular.module('ui.mention', []).directive('mention', function ($q, $timeout) {
   return {
     require: ['ngModel', 'mention'],
     controllerAs: '$mention',
@@ -34,9 +34,13 @@ angular.module('ui.mention', []).directive('mention', function ($q) {
       this.init = function (model) {
         var _this = this;
 
+        // Leading whitespace shows up in the textarea but not the preview
+        $attrs.ngTrim = 'false';
+
         ngModel = model;
+
         ngModel.$parsers.push(function (value) {
-          //
+          // Removes any mentions that aren't used
           _this.mentions = _this.mentions.filter(function (mention) {
             if (~value.indexOf(_this.label(mention))) return value = value.replace(_this.label(mention), _this.encode(mention));
           });
@@ -45,13 +49,14 @@ angular.module('ui.mention', []).directive('mention', function ($q) {
 
           return value;
         });
+
         ngModel.$formatters.push(function () {
           var value = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
 
           // In case the value is a different primitive
           value = value.toString();
 
-          // Removes any mentions that aren't present
+          // Removes any mentions that aren't used
           _this.mentions = _this.mentions.filter(function (mention) {
             if (~value.indexOf(_this.encode(mention))) {
               value = value.replace(_this.encode(mention), _this.label(mention));
@@ -63,6 +68,7 @@ angular.module('ui.mention', []).directive('mention', function ($q) {
 
           return value;
         });
+
         ngModel.$render = function () {
           $element.val(ngModel.$viewValue || '');
           _this.render();
@@ -122,7 +128,7 @@ angular.module('ui.mention', []).directive('mention', function ($q) {
        * @return {string}              Human-readable string version of choice
        */
       this.label = function (choice) {
-        return choice.first;
+        return choice.first + ' ' + choice.last;
       };
 
       /**
@@ -263,6 +269,12 @@ angular.module('ui.mention', []).directive('mention', function ($q) {
         this.searching = null;
       };
 
+      this.autogrow = function () {
+        $element[0].style.height = 0; // autoshrink - need accurate scrollHeight
+        var style = getComputedStyle($element[0]);
+        if (style.boxSizing == 'border-box') $element[0].style.height = $element[0].scrollHeight + 'px';
+      };
+
       // Interactions to trigger searching
       $element.on('keyup click focus', function (event) {
         // If event is fired AFTER activeChoice move is performed
@@ -307,6 +319,11 @@ angular.module('ui.mention', []).directive('mention', function ($q) {
 
         $scope.$apply();
       });
+
+      // Autogrow is mandatory beacuse the textarea scrolls away from highlights
+      $element.on('input', this.autogrow);
+      // Initialize autogrow height
+      $timeout(this.autogrow, true);
     }
   };
 });

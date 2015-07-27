@@ -18,9 +18,10 @@
 
   <div class="mention-container">
     <textarea mention mention-example
-     ng-model="post.message"
-     placeholder="Use @mention to trigger"
-     ></textarea>
+      ng-model="post.message"
+      placeholder="Use @mention to trigger"
+      ng-trim="false"
+      ></textarea>
     <div class="output"></div>
 
     <ul ng-if="$mention.choices.length" class="dropdown">

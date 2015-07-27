@@ -2,9 +2,6 @@ body {
   font-size: 14px;
   font-family: 'Helvetica'; }
 
-* {
-  box-sizing: border-box; }
-
 textarea[mention], textarea[mention] + * {
   line-height: 1em;
   font-size: 1rem;
@@ -14,7 +11,7 @@ textarea[mention], textarea[mention] + * {
   font-weight: normal; }
 
 textarea[mention] {
-  height: 100px;
+  min-height: 100px;
   width: 100%;
   display: block;
   border: 1px solid;
