@@ -11,6 +11,8 @@ Facebook-like @mentions for text inputs built around composability
 
 ## Amazing Features!
 
+_All these features come at the amazingly low price of DO IT YOURSELF and $0.00. YMMV._
+
 Find things!:
 ```
 mention.findChoices = function(match) {
