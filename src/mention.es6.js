@@ -1,5 +1,5 @@
 angular.module('ui.mention', [])
-.directive('mention', function($q, $timeout){
+.directive('uiMention', function($q, $timeout){
   return {
     require: ['ngModel', 'mention'],
     controllerAs: '$mention',
@@ -226,11 +226,7 @@ angular.module('ui.mention', [])
        * @return {array[choice]|Promise} The list of possible choices
        */
       this.findChoices = function(match, mentions) {
-        return []
-          // Remove items that are already mentioned
-          .filter( choice => !mentions.some( mention => mention.id === choice.id ) )
-          // Matches items from search query
-          .filter( choice => ~`${choice.first} ${choice.last}`.indexOf(match[1]) );
+        return [];
       };
 
       /**
