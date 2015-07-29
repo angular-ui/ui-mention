@@ -4,15 +4,15 @@ var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = 
 
 angular.module('ui.mention', []).directive('uiMention', function ($q, $timeout) {
   return {
-    require: ['ngModel', 'mention'],
+    require: ['ngModel', 'uiMention'],
     controllerAs: '$mention',
     link: function link($scope, $element, $attrs, _ref) {
       var _ref2 = _slicedToArray(_ref, 2);
 
       var ngModel = _ref2[0];
-      var mention = _ref2[1];
+      var uiMention = _ref2[1];
 
-      mention.init(ngModel);
+      uiMention.init(ngModel);
     },
     controller: function controller($element, $scope, $attrs) {
       var _this2 = this;

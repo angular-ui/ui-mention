@@ -1,10 +1,10 @@
 angular.module('ui.mention', [])
 .directive('uiMention', function($q, $timeout){
   return {
-    require: ['ngModel', 'mention'],
+    require: ['ngModel', 'uiMention'],
     controllerAs: '$mention',
-    link: function($scope, $element, $attrs, [ngModel, mention]) {
-      mention.init(ngModel);
+    link: function($scope, $element, $attrs, [ngModel, uiMention]) {
+      uiMention.init(ngModel);
     },
     controller: function($element, $scope, $attrs) {
       // Beginning of input or preceeded by spaces: @sometext
