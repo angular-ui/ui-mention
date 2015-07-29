@@ -94,7 +94,8 @@ Find things!:
 ```js
 mention.findChoices = function(match) {
   // Matches items from search query
-  return [/* choices */].filter( choice => ~this.label(choice).indexOf(match[1]) );
+  return [/* choices */]
+    .filter( choice => ~this.label(choice).indexOf(match[1]) );
 }
 ```
 
@@ -108,7 +109,8 @@ mention.findChoices = _.throttle(function(match) {
 Hate redundancy? De-dupe that shiz:
 ```js
 mention.findChoices = function(match, mentions) {
-  return [ /* choices */ ].filter( choice => !mentions.some( mention => mention.id === choice.id ) )
+  return [ /* choices */ ]
+    .filter( choice => !mentions.some( mention => mention.id === choice.id ) )
 };
 ```
 
