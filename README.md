@@ -16,15 +16,15 @@ For now, you should create a child-directive to customize (API probably going to
 ```js
 .directive('myMention', function($http){
   return {
-    require: 'mention',
-    link($scope, $element, $attrs, mention) {
+    require: 'uiMention',
+    link($scope, $element, $attrs, uiMention) {
       /**
        * Converts a choice object to a human-readable string
        *
        * @param  {mixed|object} choice The choice to be rendered
        * @return {string}              Human-readable string version of choice
        */
-       mention.label = function(choice) {
+       uiMention.label = function(choice) {
          return `${choice.first_name} ${choice.last_name}`;
        };
 
@@ -34,7 +34,7 @@ For now, you should create a child-directive to customize (API probably going to
        * @param  {regex.exec()} match    The trigger-text regex match object
        * @return {array[choice]|Promise} The list of possible choices
        */
-      mention.findChoices = function(match, mentions) {
+      uiMention.findChoices = function(match, mentions) {
         return $http.get(...).then(...);
       };
     }
@@ -43,7 +43,7 @@ For now, you should create a child-directive to customize (API probably going to
 ```
 You have to build the HTML yourself:
 ```html
-<div class="mention">
+<div class="ui-mention-container">
   <textarea ng-model="data" ui-mention my-mention></textarea>
   <div class="ui-mention-highlight"></div>
 </div>
