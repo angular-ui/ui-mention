@@ -6,7 +6,7 @@ body {
   // box-sizing: border-box;
 }
 
-textarea[mention], textarea[mention] + * {
+textarea[ui-mention], textarea[ui-mention] + * {
   line-height: 1em;
   font-size: 1rem;
   padding: 5px;
@@ -16,7 +16,7 @@ textarea[mention], textarea[mention] + * {
 }
 
 
-textarea[mention] {
+textarea[ui-mention] {
   // box-sizing: content-box;
   min-height: 100px;
   width: 100%;
@@ -24,24 +24,8 @@ textarea[mention] {
   border: 1px solid;
   z-index: 2;
   position: relative;
-  &[mention] {
+  &[ui-mention] {
     background: rgba(0,0,0,0);
-  }
-  + * {
-    border: 1px;
-    padding: 2px;
-    z-index: 1;
-    color: rgba(0,0,0,0);
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    white-space: pre-wrap;
-
-    span {
-      background: lightblue;
-    }
   }
 }
 a {
@@ -55,7 +39,26 @@ a {
 
 .mention-container {
   position: relative;
+}
+.mention-highlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px;
+  padding: 2px;
+  z-index: 1;
+  color: rgba(0,0,0,0);
+  white-space: pre-wrap;
 
+  span {
+    padding: 0 2px;
+    border-radius: 3px;
+    background: lightblue;
+    border: 1px solid blue;
+    margin: -1px -3px;
+  }
 }
 
 .dropdown {

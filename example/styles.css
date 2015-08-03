@@ -2,7 +2,7 @@ body {
   font-size: 14px;
   font-family: 'Helvetica'; }
 
-textarea[mention], textarea[mention] + * {
+textarea[ui-mention], textarea[ui-mention] + * {
   line-height: 1em;
   font-size: 1rem;
   padding: 5px;
@@ -10,28 +10,15 @@ textarea[mention], textarea[mention] + * {
   font-family: helvetica;
   font-weight: normal; }
 
-textarea[mention] {
+textarea[ui-mention] {
   min-height: 100px;
   width: 100%;
   display: block;
   border: 1px solid;
   z-index: 2;
   position: relative; }
-  textarea[mention][mention] {
+  textarea[ui-mention][ui-mention] {
     background: transparent; }
-  textarea[mention] + * {
-    border: 1px;
-    padding: 2px;
-    z-index: 1;
-    color: transparent;
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    white-space: pre-wrap; }
-    textarea[mention] + * span {
-      background: lightblue; }
 
 a {
   color: blue;
@@ -42,6 +29,24 @@ a {
 
 .mention-container {
   position: relative; }
+
+.mention-highlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px;
+  padding: 2px;
+  z-index: 1;
+  color: transparent;
+  white-space: pre-wrap; }
+  .mention-highlight span {
+    padding: 0 2px;
+    border-radius: 3px;
+    background: lightblue;
+    border: 1px solid blue;
+    margin: -1px -3px; }
 
 .dropdown {
   position: absolute;

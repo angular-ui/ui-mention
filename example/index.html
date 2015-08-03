@@ -23,7 +23,7 @@
       placeholder="Use @mention to trigger"
       ng-trim="false"
       ></textarea>
-    <div class="output"></div>
+    <div class="mention-highlight"></div>
 
     <ul ng-if="$mention.choices.length" class="dropdown">
       <li ng-repeat="choice in $mention.choices" ng-class="{active:$mention.activeChoice==choice}">
