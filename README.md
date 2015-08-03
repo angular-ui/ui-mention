@@ -58,7 +58,8 @@ You have to build the HTML yourself:
 And the CSS:
 ```scss
 .ui-mention-container {
-  textarea {
+  position: relative;
+  [ui-mention] {
     min-height: 100px;
     background: none;
     position: relative;
@@ -79,7 +80,7 @@ And the CSS:
         background-color: lightblue;
         border: 1px solid blue;
         padding: 0 2px;
-        margin: 0 -3px;
+        margin: -1px -3px;
       }
     }
   }
