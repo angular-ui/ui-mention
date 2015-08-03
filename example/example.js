@@ -6,8 +6,8 @@ angular.module('example', ['ui.mention']).run(function ($rootScope) {
   };
 }).directive('mentionExample', function () {
   return {
-    require: 'mention',
-    link: function link($scope, $element, $attrs, mention) {
+    require: 'uiMention',
+    link: function link($scope, $element, $attrs, uiMention) {
       /**
        * $mention.findChoices()
        *
@@ -15,7 +15,7 @@ angular.module('example', ['ui.mention']).run(function ($rootScope) {
        * @todo Try to avoid using a regex match object
        * @return {array[choice]|Promise} The list of possible choices
        */
-      mention.findChoices = function (match, mentions) {
+      uiMention.findChoices = function (match, mentions) {
         return choices
         // Remove items that are already mentioned
         .filter(function (choice) {
