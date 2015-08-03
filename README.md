@@ -57,7 +57,7 @@ You have to build the HTML yourself:
 ```
 And the CSS:
 ```scss
-.mention {
+.ui-mention-container {
   textarea {
     min-height: 100px;
     background: none;
