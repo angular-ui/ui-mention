@@ -312,7 +312,7 @@ angular.module('ui.mention', []).directive('uiMention', function ($q, $timeout, 
         var _this4 = this;
 
         if (event.target == $element[0]) return;
-        console.log('blur');
+
         $document.off('mouseup', this.onMouseup);
 
         if (!this.searching) return;
@@ -324,7 +324,6 @@ angular.module('ui.mention', []).directive('uiMention', function ($q, $timeout, 
       }).bind(this);
 
       $element.on('focus', function (event) {
-        console.log('focus');
         $document.on('mouseup', _this2.onMouseup);
       });
 

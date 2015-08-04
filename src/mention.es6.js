@@ -293,7 +293,7 @@ angular.module('ui.mention', [])
       this.onMouseup = (function(event) {
         if (event.target == $element[0])
           return
-        console.log('blur')
+
         $document.off('mouseup', this.onMouseup);
 
         if (!this.searching)
@@ -306,7 +306,6 @@ angular.module('ui.mention', [])
       }).bind(this);
 
       $element.on('focus', event => {
-        console.log('focus')
         $document.on('mouseup', this.onMouseup);
       });
 
