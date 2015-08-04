@@ -289,46 +289,25 @@ angular.module('ui.mention', [])
       });
 
 
-      // Fires before blur
-      var clicking = false;
-      this.onMousedown = function(event) {
-        if (event.target !== $element[0]) {
-          clicking = true;
-          $document.off('mousedown', this.onMousedown);
-        }
-      }
 
-      this.onMouseup = function(event) {
-        if (event.target !== $element[0])
-          $document.off('mouseup', this.onMouseup);
+      this.onMouseup = (function(event) {
+        if (event.target == $element[0])
+          return
+        console.log('blur')
+        $document.off('mouseup', this.onMouseup);
 
-        if (!clicking)
+        if (!this.searching)
           return;
 
         // Let ngClick fire first
         $scope.$evalAsync( () => {
           this.cancel();
         });
-      }
+      }).bind(this);
 
       $element.on('focus', event => {
-        $document.on('mousedown', this.onMousedown.bind(this));
-        $document.on('mouseup', this.onMouseup.bind(this));
-      });
-
-      $element.on('blur', event => {
-        if (clicking) {
-          return;
-        } else {
-          $document.off('mouseup', this.onMouseup);
-          $document.off('mousedown', this.onMousedown);
-        }
-
-        if (!this.searching)
-          return;
-
-        this.cancel();
-        $scope.$apply();
+        console.log('focus')
+        $document.on('mouseup', this.onMouseup);
       });
 
       // Autogrow is mandatory beacuse the textarea scrolls away from highlights

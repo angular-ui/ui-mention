@@ -308,45 +308,24 @@ angular.module('ui.mention', []).directive('uiMention', function ($q, $timeout, 
         $scope.$apply();
       });
 
-      // Fires before blur
-      var clicking = false;
-      this.onMousedown = function (event) {
-        if (event.target !== $element[0]) {
-          clicking = true;
-          $document.off('mousedown', this.onMousedown);
-        }
-      };
-
-      this.onMouseup = function (event) {
+      this.onMouseup = (function (event) {
         var _this4 = this;
 
-        if (event.target !== $element[0]) $document.off('mouseup', this.onMouseup);
+        if (event.target == $element[0]) return;
+        console.log('blur');
+        $document.off('mouseup', this.onMouseup);
 
-        if (!clicking) return;
+        if (!this.searching) return;
 
         // Let ngClick fire first
         $scope.$evalAsync(function () {
           _this4.cancel();
         });
-      };
+      }).bind(this);
 
       $element.on('focus', function (event) {
-        $document.on('mousedown', _this2.onMousedown.bind(_this2));
-        $document.on('mouseup', _this2.onMouseup.bind(_this2));
-      });
-
-      $element.on('blur', function (event) {
-        if (clicking) {
-          return;
-        } else {
-          $document.off('mouseup', _this2.onMouseup);
-          $document.off('mousedown', _this2.onMousedown);
-        }
-
-        if (!_this2.searching) return;
-
-        _this2.cancel();
-        $scope.$apply();
+        console.log('focus');
+        $document.on('mouseup', _this2.onMouseup);
       });
 
       // Autogrow is mandatory beacuse the textarea scrolls away from highlights
