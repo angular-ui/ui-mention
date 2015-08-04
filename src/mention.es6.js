@@ -1,5 +1,5 @@
 angular.module('ui.mention', [])
-.directive('uiMention', function($q, $timeout){
+.directive('uiMention', function($q, $timeout, $document){
   return {
     require: ['ngModel', 'uiMention'],
     controllerAs: '$mention',
@@ -153,9 +153,6 @@ angular.module('ui.mention', [])
        * @param  {mixed|object} [choice] The selected choice (default: activeChoice)
        */
       this.select = function(choice = this.activeChoice) {
-        if (!this.searching)
-          return;
-
         // Add the mention
         this.mentions.push(choice);
 
@@ -289,6 +286,27 @@ angular.module('ui.mention', [])
         event.preventDefault();
 
         $scope.$apply();
+      });
+
+
+
+      this.onMouseup = (function(event) {
+        if (event.target == $element[0])
+          return
+
+        $document.off('mouseup', this.onMouseup);
+
+        if (!this.searching)
+          return;
+
+        // Let ngClick fire first
+        $scope.$evalAsync( () => {
+          this.cancel();
+        });
+      }).bind(this);
+
+      $element.on('focus', event => {
+        $document.on('mouseup', this.onMouseup);
       });
 
       // Autogrow is mandatory beacuse the textarea scrolls away from highlights

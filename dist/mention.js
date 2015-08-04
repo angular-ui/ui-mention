@@ -2,7 +2,7 @@
 
 var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
 
-angular.module('ui.mention', []).directive('uiMention', function ($q, $timeout) {
+angular.module('ui.mention', []).directive('uiMention', function ($q, $timeout, $document) {
   return {
     require: ['ngModel', 'uiMention'],
     controllerAs: '$mention',
@@ -173,8 +173,6 @@ angular.module('ui.mention', []).directive('uiMention', function ($q, $timeout) 
       this.select = function () {
         var choice = arguments.length <= 0 || arguments[0] === undefined ? this.activeChoice : arguments[0];
 
-        if (!this.searching) return;
-
         // Add the mention
         this.mentions.push(choice);
 
@@ -308,6 +306,25 @@ angular.module('ui.mention', []).directive('uiMention', function ($q, $timeout) 
         event.preventDefault();
 
         $scope.$apply();
+      });
+
+      this.onMouseup = (function (event) {
+        var _this4 = this;
+
+        if (event.target == $element[0]) return;
+
+        $document.off('mouseup', this.onMouseup);
+
+        if (!this.searching) return;
+
+        // Let ngClick fire first
+        $scope.$evalAsync(function () {
+          _this4.cancel();
+        });
+      }).bind(this);
+
+      $element.on('focus', function (event) {
+        $document.on('mouseup', _this2.onMouseup);
       });
 
       // Autogrow is mandatory beacuse the textarea scrolls away from highlights
