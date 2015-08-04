@@ -1,5 +1,5 @@
 angular.module('ui.mention', [])
-.directive('uiMention', function($q, $timeout){
+.directive('uiMention', function($q, $timeout, $document){
   return {
     require: ['ngModel', 'uiMention'],
     controllerAs: '$mention',
@@ -153,9 +153,6 @@ angular.module('ui.mention', [])
        * @param  {mixed|object} [choice] The selected choice (default: activeChoice)
        */
       this.select = function(choice = this.activeChoice) {
-        if (!this.searching)
-          return;
-
         // Add the mention
         this.mentions.push(choice);
 
@@ -288,6 +285,49 @@ angular.module('ui.mention', [])
         this.moved = true;
         event.preventDefault();
 
+        $scope.$apply();
+      });
+
+
+      // Fires before blur
+      var clicking = false;
+      this.onMousedown = function(event) {
+        if (event.target !== $element[0]) {
+          clicking = true;
+          $document.off('mousedown', this.onMousedown);
+        }
+      }
+
+      this.onMouseup = function(event) {
+        if (event.target !== $element[0])
+          $document.off('mouseup', this.onMouseup);
+
+        if (!clicking)
+          return;
+
+        // Let ngClick fire first
+        $scope.$evalAsync( () => {
+          this.cancel();
+        });
+      }
+
+      $element.on('focus', event => {
+        $document.on('mousedown', this.onMousedown.bind(this));
+        $document.on('mouseup', this.onMouseup.bind(this));
+      });
+
+      $element.on('blur', event => {
+        if (clicking) {
+          return;
+        } else {
+          $document.off('mouseup', this.onMouseup);
+          $document.off('mousedown', this.onMousedown);
+        }
+
+        if (!this.searching)
+          return;
+
+        this.cancel();
         $scope.$apply();
       });
 
