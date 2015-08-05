@@ -64,6 +64,7 @@ And the CSS:
     background: none;
     position: relative;
     z-index: 2;
+    box-sizing: content-box; // Prevent scrollbar for autogrow
   }
   .ui-mention-highlight {
       white-space: pre-wrap;
