@@ -46,14 +46,14 @@ You have to build the HTML yourself:
 <div class="ui-mention-container">
   <textarea ng-model="data" ui-mention my-mention></textarea>
   <div class="ui-mention-highlight"></div>
+  <ul class="dropdown" ng-if="$mention.choices.length">
+    <li ng-repeat="choice in $mention.choices"
+      ng-class="{active:$mention.activeChoice==choice}"
+      ng-click="$mention.select(choice)">
+      {{::choice.first_name}} {{::choice.last_name}}
+    </li>
+  </ul>
 </div>
-<ul class="dropdown" ng-if="$mention.choices.length">
-  <li ng-repeat="choice in $mention.choices"
-    ng-class="{active:$mention.activeChoice==choice}"
-    ng-click="$mention.select(choice)">
-    {{::choice.first_name}} {{::choice.last_name}}
-  </li>
-</ul>
 ```
 And the CSS:
 ```scss
@@ -84,6 +84,11 @@ And the CSS:
         margin: -1px -3px;
       }
     }
+  }
+  .dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
   }
 }
 ```
