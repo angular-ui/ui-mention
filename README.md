@@ -17,7 +17,7 @@ For now, you should create a child-directive to customize (API probably going to
 .directive('myMention', function($http){
   return {
     require: 'uiMention',
-    link($scope, $element, $attrs, uiMention) {
+    link: function($scope, $element, $attrs, uiMention) {
       /**
        * Converts a choice object to a human-readable string
        *
@@ -25,7 +25,7 @@ For now, you should create a child-directive to customize (API probably going to
        * @return {string}              Human-readable string version of choice
        */
        uiMention.label = function(choice) {
-         return `${choice.first_name} ${choice.last_name}`;
+         return choice.first_name + " " + choice.last_name;
        };
 
       /**
@@ -47,7 +47,7 @@ You have to build the HTML yourself:
   <textarea ng-model="data" ui-mention my-mention></textarea>
   <div class="ui-mention-highlight"></div>
 </div>
-<ul class=dropdown" ng-if="$mention.choices.length">
+<ul class="dropdown" ng-if="$mention.choices.length">
   <li ng-repeat="choice in $mention.choices"
     ng-class="{active:$mention.activeChoice==choice}"
     ng-click="$mention.select(choice)">
