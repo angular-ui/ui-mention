@@ -44,8 +44,11 @@ For now, you should create a child-directive to customize (API probably going to
 You have to build the HTML yourself:
 ```html
 <div class="ui-mention-container">
+
   <textarea ng-model="data" ui-mention my-mention></textarea>
+  
   <div class="ui-mention-highlight"></div>
+  
   <ul class="dropdown" ng-if="$mention.choices.length">
     <li ng-repeat="choice in $mention.choices"
       ng-class="{active:$mention.activeChoice==choice}"
@@ -53,6 +56,7 @@ You have to build the HTML yourself:
       {{::choice.first_name}} {{::choice.last_name}}
     </li>
   </ul>
+  
 </div>
 ```
 And the CSS:
