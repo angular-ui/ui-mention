@@ -54,7 +54,7 @@ describe('uiMentionController', () => {
 
     beforeEach(function () {
       $scope.model = 'bar';
-      $element = angular.element('<span ui-mention ng-model="model"></span>');
+      $element = angular.element('<span ui-mention ng-model="model"></span><span></span>');
       ctrlInstance = createController($element);
       $scope.$digest();
     });
@@ -107,6 +107,11 @@ describe('uiMentionController', () => {
           mentionParser('foo bar');
           expect(ctrlInstance.mentions).to.eql(mentions.slice(0,1));
         });
+
+        it('updates the HTML content of the adjacent DOM element', () => {
+          mentionParser('foo bar');
+          expect($element.next().html()).to.eq('<span>foo bar</span>');
+        });
       });
 
       context('ngModel.$formatters', () => {
@@ -154,6 +159,12 @@ describe('uiMentionController', () => {
         it('defaults to an empty string', () => {
           ngModel.$render();
           expect($element.val()).to.eq('');
+        });
+
+        it('updates the HTML content of the adjacent DOM element', () => {
+          ngModel.$modelValue = '@[foo bar:1]';
+          ngModel.$render();
+          expect($element.next().html()).to.eq('<span>foo bar</span>');
         });
       });
     });
@@ -216,7 +227,7 @@ describe('uiMentionController', () => {
     });
 
     context('.label()', () => {
-      it('convets the given object to a readable string', () => {
+      it('converts the given object to a readable string', () => {
         expect(ctrlInstance.label({ first: 0, last: 1 })).to.eq('0 1');
       });
     });
@@ -246,6 +257,16 @@ describe('uiMentionController', () => {
         expect(ctrlInstance.mentions.length).to.eq(0);
         ctrlInstance.select({ first: 'foo', last: 'bar' });
         expect(ctrlInstance.mentions[0]).to.eql({ first: 'foo', last: 'bar' });
+      });
+
+      it('clears the controller choices', () => {
+        ctrlInstance.select({ first: 'foo', last: 'bar' });
+        expect(ctrlInstance.choices).to.eql([]);
+      });
+
+      it('sets the searching regex to null', () => {
+        ctrlInstance.select({ first: 'foo', last: 'bar' });
+        expect(ctrlInstance.searching).to.eq(null);
       });
 
       it('returns nothing', () => {
