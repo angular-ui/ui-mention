@@ -100,18 +100,12 @@ describe('uiMentionController', () => {
         });
 
         it('returns the given value', () => {
-          expect(mentionParser('foo')).to.eq('foo');
+          expect(mentionParser('foo bar')).to.eq('@[foo bar:1]');
         });
 
         it('filters out non matching mentions', () => {
           mentionParser('foo bar');
           expect(ctrlInstance.mentions).to.eql(mentions.slice(0,1));
-        });
-
-        it('calls the controller render method with the given value', () => {
-          let spy = sinon.spy(ctrlInstance, 'render');
-          mentionParser('foo bar');
-          expect(spy).to.have.been.calledOnce.and.calledWith('@[foo bar:1]');
         });
       });
 
@@ -160,12 +154,6 @@ describe('uiMentionController', () => {
         it('defaults to an empty string', () => {
           ngModel.$render();
           expect($element.val()).to.eq('');
-        });
-
-        it('calls the controller render method', () => {
-          let spy = sinon.spy(ctrlInstance, 'render');
-          ngModel.$render();
-          expect(spy).to.have.been.calledOnce;
         });
       });
     });
@@ -221,12 +209,6 @@ describe('uiMentionController', () => {
       it('returns an HTML formatted version of the given argument', () => {
         expect(ctrlInstance.highlight(choice)).to.eq('<span>x y</span>');
       });
-
-      it('calls the controller label method internally', () => {
-        let spy = sinon.spy(ctrlInstance, 'label');
-        ctrlInstance.highlight(choice);
-        expect(spy).to.have.been.calledOnce.and.calledWith(choice);
-      });
     });
 
     context.skip('.decode()', () => {
@@ -264,18 +246,6 @@ describe('uiMentionController', () => {
         expect(ctrlInstance.mentions.length).to.eq(0);
         ctrlInstance.select({ first: 'foo', last: 'bar' });
         expect(ctrlInstance.mentions[0]).to.eql({ first: 'foo', last: 'bar' });
-      });
-
-      it('calls the controller cancel method internally', () => {
-        let spy = sinon.spy(ctrlInstance, 'cancel');
-        ctrlInstance.select({ first: 'foo', last: 'bar' });
-        expect(spy).to.have.been.calledOnce;
-      });
-
-      it('calls the ngModel.$render method internally', () => {
-        let spy = sinon.spy(ngModel, '$render');
-        ctrlInstance.select({ first: 'foo', last: 'bar' });
-        expect(spy).to.have.been.calledOnce;
       });
 
       it('returns nothing', () => {
