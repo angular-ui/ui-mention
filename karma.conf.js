@@ -5,8 +5,9 @@ module.exports = function(config) {
     files: [
       'node_modules/angular/angular.js',
       'node_modules/angular-mocks/angular-mocks.js',
+      'node_modules/phantomjs-polyfill/bind-polyfill.js',
       'src/**/*.js',
-      'test/**/*.js'
+      'test/**/*.spec.js'
     ],
     preprocessors: {
       'src/**/*.js': 'babel',

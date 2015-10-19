@@ -487,13 +487,9 @@ describe('uiMentionController', () => {
     function trigger (el, ev, code) {
       let evt;
 
-      if (code) {
-        evt = $document[0].createEvent('KeyboardEvent');
-        evt.initKeyboardEvent(ev, true, true);
-        evt.keyCode = code;
-      } else {
-        evt = new Event(ev);
-      }
+      evt = $document[0].createEvent('KeyboardEvent');
+      evt.initKeyboardEvent(ev, true, true);
+      evt.keyCode = code;
 
       el[0].dispatchEvent(evt);
 
