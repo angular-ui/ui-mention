@@ -1,7 +1,7 @@
 angular.module('ui.mention')
-.controller('uiMentionController', function (
+.controller('uiMention', function (
   $element, $scope, $attrs, $q, $timeout, $document
-  ) {
+) {
 
   // Beginning of input or preceeded by spaces: @sometext
   this.pattern = this.pattern || /(?:\s+|^)@(\w+(?: \w+)?)$/;
@@ -54,6 +54,7 @@ angular.module('ui.mention')
 
     ngModel.$render = () => {
       $element.val(ngModel.$viewValue || '');
+      $timeout(this.autogrow, true);
       this.render();
     };
   };

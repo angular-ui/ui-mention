@@ -1,13 +1,13 @@
 describe('uiMentionDirective', () => {
-  let Subject, $scope, compileDir, uiMentionController;
+  let Subject, $scope, compileDir, ctrlInstance;
 
   beforeEach(() => {
-    uiMentionController = function () {
-      uiMentionController.init = this.init = sinon.stub();
+    ctrlInstance = function () {
+      ctrlInstance.init = this.init = sinon.stub();
     };
 
     module('ui.mention', ($controllerProvider) => {
-      $controllerProvider.register('uiMentionController', uiMentionController);
+      $controllerProvider.register('uiMention', ctrlInstance);
     });
 
     inject(($injector) => {
@@ -57,10 +57,9 @@ describe('uiMentionDirective', () => {
       $scope.model = 'wat';
       compileDir('<span ui-mention ng-model="model"></span>');
       $scope.$digest();
-      expect(uiMentionController.init).to.have.been.calledOnce.and.calledWithMatch({
+      expect(ctrlInstance.init).to.have.been.calledOnce.and.calledWithMatch({
         $modelValue: 'wat'
       });
     });
   });
 });
-

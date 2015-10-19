@@ -5,7 +5,7 @@ var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = 
 angular.module('ui.mention', []).directive('uiMention', function () {
   return {
     require: ['ngModel', 'uiMention'],
-    controller: 'uiMentionController',
+    controller: 'uiMention',
     controllerAs: '$mention',
     link: function link($scope, $element, $attrs, _ref) {
       var _ref2 = _slicedToArray(_ref, 2);
@@ -19,7 +19,7 @@ angular.module('ui.mention', []).directive('uiMention', function () {
 });
 'use strict';
 
-angular.module('ui.mention').controller('uiMentionController', function ($element, $scope, $attrs, $q, $timeout, $document) {
+angular.module('ui.mention').controller('uiMention', function ($element, $scope, $attrs, $q, $timeout, $document) {
   var _this2 = this;
 
   // Beginning of input or preceeded by spaces: @sometext
@@ -76,6 +76,7 @@ angular.module('ui.mention').controller('uiMentionController', function ($elemen
 
     ngModel.$render = function () {
       $element.val(ngModel.$viewValue || '');
+      $timeout(_this.autogrow, true);
       _this.render();
     };
   };

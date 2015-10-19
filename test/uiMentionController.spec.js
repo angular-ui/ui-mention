@@ -1,4 +1,4 @@
-describe('uiMentionController', () => {
+describe('uiMention', () => {
   let $scope, $attrs, $q, $timeout, $document, createController, ngModelController;
 
   beforeEach(() => {
@@ -12,7 +12,7 @@ describe('uiMentionController', () => {
       $attrs    = {};
 
       createController = (el) => {
-        return $controller('uiMentionController', {
+        return $controller('uiMention', {
           $scope:    $scope,
           $attrs:    $attrs,
           $element:  el,

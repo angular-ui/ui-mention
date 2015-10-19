@@ -46,9 +46,9 @@ You have to build the HTML yourself:
 <div class="ui-mention-container">
 
   <textarea ng-model="data" ui-mention my-mention></textarea>
-  
+
   <div class="ui-mention-highlight"></div>
-  
+
   <ul class="dropdown" ng-if="$mention.choices.length">
     <li ng-repeat="choice in $mention.choices"
       ng-class="{active:$mention.activeChoice==choice}"
@@ -56,7 +56,7 @@ You have to build the HTML yourself:
       {{::choice.first_name}} {{::choice.last_name}}
     </li>
   </ul>
-  
+
 </div>
 ```
 And the CSS:
@@ -117,7 +117,7 @@ mention.findChoices = _.throttle(function(match) {
 }, 300);
 ```
 
-Hate redundancy? De-dupe that shiz:
+Hate redundancy? De-dupe that shiznizzle:
 ```js
 mention.findChoices = function(match, mentions) {
   return [ /* choices */ ]
@@ -138,9 +138,8 @@ Your servers are slow? Bitch please.
 mention.findChoices = function(match) {
   mention.loading = true;
   return $http.get(...)
-    .then( response => {
+    .finally( response => {
       mention.loading = false;
-      return response.data;
     });
 }
 ```
