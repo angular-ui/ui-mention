@@ -1,5 +1,6 @@
 var gulp = require('gulp'),
-    plugins = require('gulp-load-plugins')();
+    plugins = require('gulp-load-plugins')(),
+    Karma = require('karma').Server;
 
 var paths = {
   scripts: {
@@ -24,7 +25,6 @@ var paths = {
     }
   }
 };
-
 
 gulp.task('default', ['scripts']);
 
@@ -66,5 +66,16 @@ function styles(path) {
       .pipe(plugins.sass())
       .pipe(gulp.dest(path.dest))
       .pipe(plugins.sourcemaps.write('.'));
+  }
+}
+
+gulp.task('karma', karma());
+gulp.task('watch:karma', karma({ singleRun: false, autoWatch: true }));
+function karma (opts) {
+  opts = opts || {};
+  opts.configFile = __dirname + '/karma.conf.js';
+
+  return function (done) {
+    return new Karma(opts, done).start();
   }
 }
