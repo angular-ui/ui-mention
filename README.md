@@ -110,7 +110,7 @@ mention.findChoices = function(match) {
 }
 ```
 
-Type too damn fast? Throttle that sucker:
+Type too freakin' fast? Throttle that sucker:
 ```js
 mention.findChoices = _.throttle(function(match) {
   return [/* choices */];
