@@ -172,37 +172,10 @@ angular.module('ui.mention', ['ui.select'])
   };
 
   /**
-   * $mention.search()
+   * $mention.autogrow()
    *
-   * Searches for a list of mention choices and populates
-   * $mention.choices and $mention.activeChoice
-   *
-   * @param  {regex.exec()} match The trigger-text regex match object
-   * @todo Try to avoid using a regex match object
+   * Resizes the <textarea> $element to fit the contents of it's text
    */
-  this.search = function(match) {
-    this.searching = match;
-
-    return $q.when( this.findChoices(match, this.mentions) )
-      .then( choices => {
-        this.choices = choices;
-        this.activeChoice = choices[0];
-        return choices;
-      });
-  };
-
-  /**
-   * $mention.findChoices()
-   *
-   * @param  {regex.exec()} match    The trigger-text regex match object
-   * @todo Try to avoid using a regex match object
-   * @todo Make it easier to override this
-   * @return {array[choice]|Promise} The list of possible choices
-   */
-  this.findChoices = function(match, mentions) {
-    return [];
-  };
-
   this.autogrow = function() {
     $element[0].style.height = 0; // autoshrink - need accurate scrollHeight
     let style = getComputedStyle($element[0]);
