@@ -10,12 +10,11 @@ angular.module('ui.mention', ['ui.select'])
   };
 })
 .controller('uiMention', function (
-  $element, $scope, $attrs, $q, $timeout, $document
+  $element, $scope, $attrs, $timeout
 ) {
 
   // Beginning of input or preceeded by spaces: @sometext
   this.pattern = this.pattern || /(?:\s+|^)@(\w+(?: \w+)?)$/;
-  this.$element = $element;
   this.choices = [];
   this.mentions = [];
   var ngModel;

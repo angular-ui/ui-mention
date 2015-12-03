@@ -1,4 +1,4 @@
-angular.module('ui.select', [''])
+angular.module('ui.select', [])
 .directive('uiSelect', function() {
   return {
     require: ['ngModel', 'uiSelect'],
@@ -13,7 +13,6 @@ angular.module('ui.select', [''])
   $element, $scope, $attrs, $q, $document
 ) {
 
-  this.$element = $element;
   this.choices = [];
   var ngModel;
 
