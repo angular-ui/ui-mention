@@ -117,6 +117,14 @@ mention.findChoices = _.throttle(function(match) {
 }, 300);
 ```
 
+Minimum characters to trigger:
+```js
+mention.findChoices = function(match) {
+  if (match[1].length > 2)
+    return [/* choices */];
+};
+```
+
 Hate redundancy? De-dupe that shiznizzle:
 ```js
 mention.findChoices = function(match, mentions) {
