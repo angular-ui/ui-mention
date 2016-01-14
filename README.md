@@ -105,8 +105,9 @@ Find things!:
 ```js
 mention.findChoices = function(match) {
   // Matches items from search query
-  return [/* choices */]
-    .filter( choice => ~this.label(choice).indexOf(match[1]) );
+  return [/* choices */].filter(function(choice) {
+    return ~this.label(choice).indexOf(match[1]);
+  });
 }
 ```
 
@@ -128,8 +129,11 @@ mention.findChoices = function(match) {
 Hate redundancy? De-dupe that shiznizzle:
 ```js
 mention.findChoices = function(match, mentions) {
-  return [ /* choices */ ]
-    .filter( choice => !mentions.some( mention => mention.id === choice.id ) )
+  return [ /* choices */ ].filter(function(choice) {
+    return !mentions.some(function(mention) {
+      return mention.id === choice.id;
+    });
+  });
 };
 ```
 
@@ -137,7 +141,9 @@ Use the awesome power of the internet:
 ```js
 mention.findChoices = function(match) {
   return $http.get('/users', { params: { q: match[1] } })
-    .then( response => response.data );
+    .then(function(response) {
+      return response.data;
+    });
 }
 ```
 
@@ -146,7 +152,7 @@ Your servers are slow? Mama please.
 mention.findChoices = function(match) {
   mention.loading = true;
   return $http.get(...)
-    .finally( response => {
+    .finally(function(response) {
       mention.loading = false;
     });
 }
