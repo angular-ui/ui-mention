@@ -40,13 +40,13 @@ a {
   padding: 2px;
   z-index: 1;
   color: transparent;
-  white-space: pre-wrap; }
+  white-space: pre-wrap;
+  border: 1px solid transparent;
+  width: 100%; }
   .mention-highlight span {
-    padding: 0 2px;
     border-radius: 3px;
     background: lightblue;
-    border: 1px solid blue;
-    margin: -1px -3px; }
+    box-shadow: 0px 0px 0px 1px blue; }
 
 .dropdown {
   position: absolute;
