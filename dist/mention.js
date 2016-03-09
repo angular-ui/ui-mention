@@ -19,7 +19,7 @@ angular.module('ui.mention', []).directive('uiMention', function () {
 });
 'use strict';
 
-angular.module('ui.mention').controller('uiMention', function ($element, $scope, $attrs, $q, $timeout, $document) {
+angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$attrs", "$q", "$timeout", "$document", function ($element, $scope, $attrs, $q, $timeout, $document) {
   var _this2 = this;
 
   // Beginning of input or preceeded by spaces: @sometext
@@ -337,4 +337,4 @@ angular.module('ui.mention').controller('uiMention', function ($element, $scope,
   $element.on('input', this.autogrow);
   // Initialize autogrow height
   $timeout(this.autogrow, true);
-});
+}]);

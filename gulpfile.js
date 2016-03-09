@@ -1,6 +1,7 @@
 var gulp = require('gulp'),
     plugins = require('gulp-load-plugins')(),
-    Karma = require('karma').Server;
+    Karma = require('karma').Server
+    ngAnnotate = require('gulp-ng-annotate');
 
 var paths = {
   scripts: {
@@ -49,6 +50,7 @@ function scripts(path, concat) {
       .pipe(plugins.babel())
       .pipe(plugins.angularFilesort())
       .pipe(plugins.concat(path.file))
+      .pipe(ngAnnotate())
       .pipe(gulp.dest(path.dest))
       .pipe(plugins.uglify({ mangle: false }))
       .pipe(plugins.extReplace('.min.js'))
