@@ -87,7 +87,6 @@ And the CSS:
         padding: 0 2px;
         margin: -1px -3px;
       }
-    }
   }
   .dropdown {
     position: absolute;
