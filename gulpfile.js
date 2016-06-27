@@ -32,13 +32,13 @@ gulp.task('default', ['scripts']);
 gulp.task('example', ['scripts:example', 'styles:example']);
 
 gulp.task('watch', function(){
-  gulp.watch(paths.scripts.src, 'scripts');
-  gulp.watch(paths.styles.src, 'styles');
+  gulp.watch(paths.scripts.src, ['scripts']);
+  gulp.watch(paths.styles.src, ['styles']);
 });
 
 gulp.task('watch:example', function(){
-  gulp.watch(paths.example.scripts.src, 'scripts:example');
-  gulp.watch(paths.example.styles.src, 'styles:example');
+  gulp.watch(paths.example.scripts.src, ['scripts:example']);
+  gulp.watch(paths.example.styles.src, ['styles:example']);
 });
 
 gulp.task('scripts', scripts(paths.scripts));
