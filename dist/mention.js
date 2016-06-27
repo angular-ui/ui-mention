@@ -284,7 +284,9 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
       _this2.cancel();
     }
 
-    $scope.$apply();
+    if (!$scope.$$phase) {
+      $scope.$apply();
+    }
   });
 
   $element.on('keydown', function (event) {
@@ -311,7 +313,9 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
     _this2.moved = true;
     event.preventDefault();
 
-    $scope.$apply();
+    if (!$scope.$$phase) {
+      $scope.$apply();
+    }
   });
 
   this.onMouseup = (function (event) {

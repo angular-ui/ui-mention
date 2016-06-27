@@ -257,7 +257,9 @@ angular.module('ui.mention')
       this.cancel();
     }
 
-    $scope.$apply();
+    if (!$scope.$$phase) {
+      $scope.$apply();
+    }
   });
 
   $element.on('keydown', event => {
@@ -282,7 +284,9 @@ angular.module('ui.mention')
     this.moved = true;
     event.preventDefault();
 
-    $scope.$apply();
+    if (!$scope.$$phase) {
+      $scope.$apply();
+    }
   });
 
 
