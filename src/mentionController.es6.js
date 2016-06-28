@@ -59,6 +59,16 @@ angular.module('ui.mention')
     };
   };
 
+  var temp = document.createElement('span');
+  function parseContentAsText(content) {
+    try {
+      temp.textContent = content;
+      return temp.innerHTML;
+    } finally {
+      temp.textContent = null;
+    }
+  }
+
   /**
    * $mention.render()
    *
@@ -69,6 +79,8 @@ angular.module('ui.mention')
    */
   this.render = (html = ngModel.$modelValue) => {
     html = (html || '').toString();
+    // Convert input to text, to prevent script injection/rich text
+    html = parseContentAsText(html);
     this.mentions.forEach( mention => {
       html = html.replace(this.encode(mention), this.highlight(mention));
     });
@@ -257,7 +269,9 @@ angular.module('ui.mention')
       this.cancel();
     }
 
-    $scope.$apply();
+    if (!$scope.$$phase) {
+      $scope.$apply();
+    }
   });
 
   $element.on('keydown', event => {
@@ -282,7 +296,9 @@ angular.module('ui.mention')
     this.moved = true;
     event.preventDefault();
 
-    $scope.$apply();
+    if (!$scope.$$phase) {
+      $scope.$apply();
+    }
   });
 
 
