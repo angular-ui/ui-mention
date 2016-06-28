@@ -81,6 +81,16 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
     };
   };
 
+  var temp = document.createElement('span');
+  function parseContentAsText(content) {
+    try {
+      temp.textContent = content;
+      return temp.innerHTML;
+    } finally {
+      temp.textContent = null;
+    }
+  }
+
   /**
    * $mention.render()
    *
@@ -93,6 +103,8 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
     var html = arguments.length <= 0 || arguments[0] === undefined ? ngModel.$modelValue : arguments[0];
 
     html = (html || '').toString();
+    // Convert input to text, to prevent script injection/rich text
+    html = parseContentAsText(html);
     _this2.mentions.forEach(function (mention) {
       html = html.replace(_this2.encode(mention), _this2.highlight(mention));
     });
