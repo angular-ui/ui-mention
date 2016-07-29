@@ -2,7 +2,7 @@
   "name": "angular-ui-mention",
   "version": "0.0.7",
   "description": "Facebook-like @mentions for text inputs built around composability",
-  "main": "src/mention.js",
+  "main": "dist/mention.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
