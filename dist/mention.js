@@ -146,7 +146,11 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
    * @return {string}              Human-readable string version of choice
    */
   this.label = function (choice) {
-    return choice.first + ' ' + choice.last;
+    var str = choice.first;
+    if (choice.last) {
+      str += ' ' + choice.last;
+    }
+    return str;
   };
 
   /**

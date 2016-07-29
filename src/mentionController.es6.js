@@ -120,7 +120,11 @@ angular.module('ui.mention')
    * @return {string}              Human-readable string version of choice
    */
   this.label = function(choice) {
-    return `${choice.first} ${choice.last}`;
+    let str = choice.first;
+    if (choice.last) {
+      str += ` ${choice.last}`;
+    }
+    return str;
   };
 
   /**
