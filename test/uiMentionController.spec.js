@@ -60,7 +60,7 @@ describe('uiMention', () => {
     });
 
     [
-      'init', 'render', 'highlight', 'decode', 'label', 'encode', 'replace',
+      'init', 'render', 'renderElement', 'highlight', 'decode', 'label', 'encode', 'replace',
       'select', 'up', 'down', 'search', 'findChoices', 'cancel', 'autogrow'
     ].forEach((fn) => {
       it(fn + ' is a public API method on ' + ctrlInstance, () => {
@@ -203,10 +203,14 @@ describe('uiMention', () => {
         expect(ctrlInstance.render()).to.not.eq('<span>wat nope</span>');
       });
 
+      it('checks the render html element', () => {
+        expect(ctrlInstance.renderElement()).to.have.property('html');
+      });
+
       it('replaces the html of $element.next with the converted value', () => {
         ngModel.$modelValue = '@[foo bar:1] @[k v:2]';
         ctrlInstance.render();
-        expect($element.next().html()).to.eq('<span>foo bar</span> <span>k v</span>')
+        expect(ctrlInstance.renderElement().html()).to.eq('<span>foo bar</span> <span>k v</span>')
       });
     });
 
