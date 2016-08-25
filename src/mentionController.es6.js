@@ -84,8 +84,19 @@ angular.module('ui.mention')
     this.mentions.forEach( mention => {
       html = html.replace(this.encode(mention), this.highlight(mention));
     });
-    $element.next().html(html);
+    this.renderElement().html(html);
     return html;
+  };
+
+  /**
+   * $mention.renderElement()
+   *
+   * Get syntax-encoded HTML element
+   *
+   * @return {Element}  HTML element
+   */
+  this.renderElement = () => {
+    return $element.next();
   };
 
   /**

@@ -108,8 +108,19 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
     _this2.mentions.forEach(function (mention) {
       html = html.replace(_this2.encode(mention), _this2.highlight(mention));
     });
-    $element.next().html(html);
+    _this2.renderElement().html(html);
     return html;
+  };
+
+  /**
+   * $mention.renderElement()
+   *
+   * Get syntax-encoded HTML element
+   *
+   * @return {Element}  HTML element
+   */
+  this.renderElement = function () {
+    return $element.next();
   };
 
   /**
