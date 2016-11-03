@@ -60,7 +60,7 @@ describe('uiMention', () => {
     });
 
     [
-      'init', 'render', 'renderElement', 'highlight', 'decode', 'label', 'encode', 'replace',
+      'init', 'render', 'renderElement', 'highlight', 'decodePattern', 'decode', 'label', 'encode', 'replace',
       'select', 'up', 'down', 'search', 'findChoices', 'cancel', 'autogrow'
     ].forEach((fn) => {
       it(fn + ' is a public API method on ' + ctrlInstance, () => {
