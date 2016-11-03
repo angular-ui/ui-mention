@@ -146,7 +146,7 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
    * @return {RegExp} regex object
    */
   this.decodePattern = function () {
-    return new RegExp(this.delimiter + "[[\\s\\w]+:[0-9a-z-]+]", "gi");
+    return new RegExp(this.delimiter + "\[[\\s\\w]+:[0-9a-z-]+\]", "gi");
   };
 
   /**
