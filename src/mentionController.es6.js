@@ -98,9 +98,9 @@ angular.module('ui.mention')
    *
    * @return {Element} HTML element
    */
-  this.renderElement = () => {
-    return $element.next();
-  };
+   this.renderElement = () => {
+     return $element.next();
+   };
 
   /**
    * $mention.highlight()
