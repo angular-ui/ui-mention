@@ -1,5 +1,5 @@
 install:
-- npm install
+- npm install --silent
 
 script:
 - npm test
