@@ -25,7 +25,9 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
   // Beginning of input or preceeded by spaces: @sometext
   this.delimiter = '@';
 
-  this.pattern = new RegExp("(?:\\s+|^)" + this.delimiter + "(\\w+(?: \\w+)?)$");
+  this.searchPattern = new RegExp("(?:\\s+|^)" + this.delimiter + "(\\w+(?: \\w+)?)$");
+
+  this.decodePattern = new RegExp(this.delimiter + "\[[\\s\\w]+:[0-9a-z-]+\]", "gi");
 
   this.$element = $element;
   this.choices = [];
@@ -139,17 +141,6 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
   };
 
   /**
-   * $mention.decodePattern()
-   *
-   * Get regex object for decode
-   *
-   * @return {RegExp} regex object
-   */
-  this.decodePattern = function () {
-    return new RegExp(this.delimiter + "\[[\\s\\w]+:[0-9a-z-]+\]", "gi");
-  };
-
-  /**
    * $mention.decode()
    *
    * @note NOT CURRENTLY USED
@@ -159,7 +150,7 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
   this.decode = function () {
     var value = arguments.length <= 0 || arguments[0] === undefined ? ngModel.$modelValue : arguments[0];
 
-    return value ? value.replace(this.decodePattern(), '$1') : '';
+    return value ? value.replace(this.decodePattern, '$1') : '';
   };
 
   /**
@@ -314,7 +305,7 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
     if ($element[0].selectionStart != $element[0].selectionEnd) return;
     var text = $element.val();
     // text to left of cursor ends with `@sometext`
-    var match = _this2.pattern.exec(text.substr(0, $element[0].selectionStart));
+    var match = _this2.searchPattern.exec(text.substr(0, $element[0].selectionStart));
 
     if (match) {
       _this2.search(match);

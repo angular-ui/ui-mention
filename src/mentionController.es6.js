@@ -6,7 +6,9 @@ angular.module('ui.mention')
   // Beginning of input or preceeded by spaces: @sometext
   this.delimiter = '@';
 
-  this.pattern = new RegExp("(?:\\s+|^)" + this.delimiter + "(\\w+(?: \\w+)?)$");
+  this.searchPattern = new RegExp("(?:\\s+|^)" + this.delimiter + "(\\w+(?: \\w+)?)$");
+
+  this.decodePattern = new RegExp(this.delimiter + "\[[\\s\\w]+:[0-9a-z-]+\]", "gi");
 
   this.$element = $element;
   this.choices = [];
@@ -115,17 +117,6 @@ angular.module('ui.mention')
   };
 
   /**
-   * $mention.decodePattern()
-   *
-   * Get regex object for decode
-   *
-   * @return {RegExp} regex object
-   */
-  this.decodePattern = function() {
-    return new RegExp(this.delimiter + "\[[\\s\\w]+:[0-9a-z-]+\]", "gi");
-  };
-
-  /**
    * $mention.decode()
    *
    * @note NOT CURRENTLY USED
@@ -133,7 +124,7 @@ angular.module('ui.mention')
    * @return {string}        plaintext string with encoded labels used
    */
   this.decode = function(value = ngModel.$modelValue) {
-    return value ? value.replace(this.decodePattern(), '$1') : '';
+    return value ? value.replace(this.decodePattern, '$1') : '';
   };
 
   /**
@@ -287,7 +278,7 @@ angular.module('ui.mention')
       return;
     let text = $element.val();
     // text to left of cursor ends with `@sometext`
-    let match = this.pattern.exec(text.substr(0, $element[0].selectionStart));
+    let match = this.searchPattern.exec(text.substr(0, $element[0].selectionStart));
 
     if (match) {
       this.search(match);
