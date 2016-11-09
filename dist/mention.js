@@ -25,7 +25,8 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
   // Beginning of input or preceeded by spaces: @sometext
   this.delimiter = '@';
 
-  this.searchPattern = new RegExp("(?:\\s+|^)" + this.delimiter + "(\\w+(?: \\w+)?)$");
+  // this.pattern is left for backward compatibility
+  this.searchPattern = this.pattern || new RegExp("(?:\\s+|^)" + this.delimiter + "(\\w+(?: \\w+)?)$");
 
   this.decodePattern = new RegExp(this.delimiter + "\[[\\s\\w]+:[0-9a-z-]+\]", "gi");
 
