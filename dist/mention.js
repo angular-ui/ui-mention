@@ -202,6 +202,10 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
   this.select = function () {
     var choice = arguments.length <= 0 || arguments[0] === undefined ? this.activeChoice : arguments[0];
 
+    if (!choice) {
+      return false;
+    }
+
     // Add the mention
     this.mentions.push(choice);
 

@@ -173,6 +173,10 @@ angular.module('ui.mention')
    * @param  {mixed|object} [choice] The selected choice (default: activeChoice)
    */
   this.select = function(choice = this.activeChoice) {
+    if (!choice) {
+      return false;
+    }
+
     // Add the mention
     this.mentions.push(choice);
 
