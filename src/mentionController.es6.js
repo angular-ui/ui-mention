@@ -4,7 +4,13 @@ angular.module('ui.mention')
 ) {
 
   // Beginning of input or preceeded by spaces: @sometext
-  this.pattern = this.pattern || /(?:\s+|^)@(\w+(?: \w+)?)$/;
+  this.delimiter = '@';
+
+  // this.pattern is left for backward compatibility
+  this.searchPattern = this.pattern || new RegExp("(?:\\s+|^)" + this.delimiter + "(\\w+(?: \\w+)?)$");
+
+  this.decodePattern = new RegExp(this.delimiter + "\[[\\s\\w]+:[0-9a-z-]+\]", "gi");
+
   this.$element = $element;
   this.choices = [];
   this.mentions = [];
@@ -93,7 +99,7 @@ angular.module('ui.mention')
    *
    * Get syntax-encoded HTML element
    *
-   * @return {Element}  HTML element
+   * @return {Element} HTML element
    */
    this.renderElement = () => {
      return $element.next();
@@ -119,7 +125,7 @@ angular.module('ui.mention')
    * @return {string}        plaintext string with encoded labels used
    */
   this.decode = function(value = ngModel.$modelValue) {
-    return value ? value.replace(/@\[([\s\w]+):[0-9a-z-]+\]/gi, '$1') : '';
+    return value ? value.replace(this.decodePattern, '$1') : '';
   };
 
   /**
@@ -143,7 +149,7 @@ angular.module('ui.mention')
    * @return {string}              Syntax-encoded string version of choice
    */
   this.encode = function(choice) {
-    return `@[${this.label(choice)}:${choice.id}]`;
+    return `${this.delimiter}[${this.label(choice)}:${choice.id}]`;
   };
 
   /**
@@ -159,7 +165,7 @@ angular.module('ui.mention')
   this.replace = function(mention, search = this.searching, text = ngModel.$viewValue) {
     // TODO: come up with a better way to detect what to remove
     // TODO: consider alternative to using regex match
-    text = text.substr(0, search.index + search[0].indexOf('@')) +
+    text = text.substr(0, search.index + search[0].indexOf(this.delimiter)) +
            this.label(mention) + ' ' +
            text.substr(search.index + search[0].length);
     return text;
@@ -277,7 +283,8 @@ angular.module('ui.mention')
       return;
     let text = $element.val();
     // text to left of cursor ends with `@sometext`
-    let match = this.pattern.exec(text.substr(0, $element[0].selectionStart));
+    let match = this.searchPattern.exec(text.substr(0, $element[0].selectionStart));
+
     if (match) {
       this.search(match);
     } else {
@@ -316,8 +323,6 @@ angular.module('ui.mention')
     }
   });
 
-
-
   this.onMouseup = (function(event) {
     if (event.target == $element[0])
       return
@@ -339,6 +344,7 @@ angular.module('ui.mention')
 
   // Autogrow is mandatory beacuse the textarea scrolls away from highlights
   $element.on('input', this.autogrow);
+
   // Initialize autogrow height
   $timeout(this.autogrow, true);
 });

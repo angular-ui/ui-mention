@@ -32,8 +32,16 @@ describe('uiMention', () => {
       ctrlInstance = createController($element);
     });
 
-    it('exposes a pattern', () => {
-      expect(ctrlInstance.pattern).to.eql(/(?:\s+|^)@(\w+(?: \w+)?)$/);
+    it('exposes a delimiter', () => {
+      expect(ctrlInstance.delimiter).to.eql('@');
+    });
+
+    it('exposes a searchPattern', () => {
+      expect(ctrlInstance.searchPattern).to.eql(/(?:\s+|^)@(\w+(?: \w+)?)$/);
+    });
+
+    it('exposes a decodePattern', () => {
+      expect(ctrlInstance.decodePattern).to.eql(/@[[\s\w]+:[0-9a-z-]+]/gi);
     });
 
     it('exposes the given $element', () => {
@@ -399,7 +407,7 @@ describe('uiMention', () => {
 
         it('searches if there is a match', () => {
           let spy = sinon.spy(ctrlInstance, 'search');
-          ctrlInstance.pattern = /foo/;
+          ctrlInstance.searchPattern = /foo/;
           $element.val('@foo');
           $element[0].selectionStart = $element[0].selectionEnd = 4;
 
@@ -410,7 +418,7 @@ describe('uiMention', () => {
 
         it('cancels if there is no match', () => {
           let spy = sinon.spy(ctrlInstance, 'cancel');
-          ctrlInstance.pattern = /foo/;
+          ctrlInstance.searchPattern = /foo/;
           $element.val('@bar');
           $element[0].selectionStart = $element[0].selectionEnd = 4;
 
