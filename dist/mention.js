@@ -23,7 +23,13 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
   var _this2 = this;
 
   // Beginning of input or preceeded by spaces: @sometext
-  this.pattern = this.pattern || /(?:\s+|^)@(\w+(?: \w+)?)$/;
+  this.delimiter = '@';
+
+  // this.pattern is left for backward compatibility
+  this.searchPattern = this.pattern || new RegExp("(?:\\s+|^)" + this.delimiter + "(\\w+(?: \\w+)?)$");
+
+  this.decodePattern = new RegExp(this.delimiter + "\[[\\s\\w]+:[0-9a-z-]+\]", "gi");
+
   this.$element = $element;
   this.choices = [];
   this.mentions = [];
@@ -117,7 +123,7 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
    *
    * Get syntax-encoded HTML element
    *
-   * @return {Element}  HTML element
+   * @return {Element} HTML element
    */
   this.renderElement = function () {
     return $element.next();
@@ -145,7 +151,7 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
   this.decode = function () {
     var value = arguments.length <= 0 || arguments[0] === undefined ? ngModel.$modelValue : arguments[0];
 
-    return value ? value.replace(/@\[([\s\w]+):[0-9a-z-]+\]/gi, '$1') : '';
+    return value ? value.replace(this.decodePattern, '$1') : '';
   };
 
   /**
@@ -169,7 +175,7 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
    * @return {string}              Syntax-encoded string version of choice
    */
   this.encode = function (choice) {
-    return '@[' + this.label(choice) + ':' + choice.id + ']';
+    return this.delimiter + '[' + this.label(choice) + ':' + choice.id + ']';
   };
 
   /**
@@ -188,7 +194,7 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
 
     // TODO: come up with a better way to detect what to remove
     // TODO: consider alternative to using regex match
-    text = text.substr(0, search.index + search[0].indexOf('@')) + this.label(mention) + ' ' + text.substr(search.index + search[0].length);
+    text = text.substr(0, search.index + search[0].indexOf(this.delimiter)) + this.label(mention) + ' ' + text.substr(search.index + search[0].length);
     return text;
   };
 
@@ -304,7 +310,8 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
     if ($element[0].selectionStart != $element[0].selectionEnd) return;
     var text = $element.val();
     // text to left of cursor ends with `@sometext`
-    var match = _this2.pattern.exec(text.substr(0, $element[0].selectionStart));
+    var match = _this2.searchPattern.exec(text.substr(0, $element[0].selectionStart));
+
     if (match) {
       _this2.search(match);
     } else {
@@ -366,6 +373,7 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
 
   // Autogrow is mandatory beacuse the textarea scrolls away from highlights
   $element.on('input', this.autogrow);
+
   // Initialize autogrow height
   $timeout(this.autogrow, true);
 }]);
