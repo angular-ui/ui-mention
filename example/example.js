@@ -1,10 +1,10 @@
 'use strict';
 
-angular.module('example', ['ui.mention']).run(["$rootScope", function ($rootScope) {
+angular.module('example', ['ui.mention']).run(function ($rootScope) {
   $rootScope.post = {
     message: 'hi there @k'
   };
-}]).directive('mentionExample', function () {
+}).directive('mentionExample', function () {
   return {
     require: 'uiMention',
     link: function link($scope, $element, $attrs, uiMention) {
