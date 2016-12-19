@@ -1,16 +1,18 @@
 # ui-mention
 Facebook-like @mentions for text inputs built around composability
 
-## Contribute
+## Installation Methods
 
-0. `npm install`
-0. `npm install -g gulp bower`
-0. `bower install`
-0. `gulp [watch]`
-0. Compiling the example code: `gulp example [watch]`
-
+### npm
+```
+$ npm install angular-ui-mention
+```
+### bower
+```
+$ bower install angular-ui-mention
+```
 ## Usage
-
+```
 For now, you should create a child-directive to customize (API probably going to change)
 
 ```js
@@ -100,6 +102,15 @@ And the CSS:
 
 _All these features come at the amazingly low price of DO IT YOURSELF and $0.00. YMMV._
 
+User your own patterns:
+```js
+mention.delimiter = '/* delimiter */';
+
+mention.searchPattern = new RegExp("/* pattern */");
+
+mention.decodePattern = new RegExp("/* pattern */");
+```
+
 Find things!:
 ```js
 mention.findChoices = function(match) {
@@ -173,3 +184,11 @@ SPINNIES!
   <li ng-repeat=...>...</li>
 </ul>
 ```
+
+## Contribute
+
+0. `npm install`
+0. `npm install -g gulp bower`
+0. `bower install`
+0. `gulp [watch]`
+0. Compiling the example code: `gulp example [watch]`
