@@ -12,7 +12,6 @@ $ npm install angular-ui-mention
 $ bower install angular-ui-mention
 ```
 ## Usage
-```
 For now, you should create a child-directive to customize (API probably going to change)
 
 ```js
