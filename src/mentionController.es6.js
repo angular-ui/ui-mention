@@ -33,7 +33,7 @@ angular.module('ui.mention')
       // Removes any mentions that aren't used
       this.mentions = this.mentions.filter( mention => {
        if (~value.indexOf(this.label(mention)))
-          return value = value.replace(this.label(mention), this.encode(mention));
+          return value = value.split(this.label(mention)).join(this.encode(mention));
       });
 
       this.render(value);
@@ -48,7 +48,7 @@ angular.module('ui.mention')
       // Removes any mentions that aren't used
       this.mentions = this.mentions.filter( mention => {
         if (~value.indexOf(this.encode(mention))) {
-          value = value.replace(this.encode(mention), this.label(mention));
+          value = value.split(this.encode(mention)).join(this.label(mention));
           return true;
         } else {
           return false;
@@ -183,8 +183,10 @@ angular.module('ui.mention')
       return false;
     }
 
-    // Add the mention
-    this.mentions.push(choice);
+    // Add the mention, unless its already been mentioned
+    if(this.mentions.indexOf(choice < 0)) {
+      this.mentions.push(choice);
+    }
 
     // Replace the search with the label
     ngModel.$setViewValue(this.replace(choice));

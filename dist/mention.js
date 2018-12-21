@@ -53,7 +53,7 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
     ngModel.$parsers.push(function (value) {
       // Removes any mentions that aren't used
       _this.mentions = _this.mentions.filter(function (mention) {
-        if (~value.indexOf(_this.label(mention))) return value = value.replace(_this.label(mention), _this.encode(mention));
+        if (~value.indexOf(_this.label(mention))) return value = value.split(_this.label(mention)).join(_this.encode(mention));
       });
 
       _this.render(value);
@@ -70,7 +70,7 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
       // Removes any mentions that aren't used
       _this.mentions = _this.mentions.filter(function (mention) {
         if (~value.indexOf(_this.encode(mention))) {
-          value = value.replace(_this.encode(mention), _this.label(mention));
+          value = value.split(_this.encode(mention)).join(_this.label(mention));
           return true;
         } else {
           return false;
@@ -212,8 +212,10 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
       return false;
     }
 
-    // Add the mention
-    this.mentions.push(choice);
+    // Add the mention, unless its already been mentioned
+    if (this.mentions.indexOf(choice < 0)) {
+      this.mentions.push(choice);
+    }
 
     // Replace the search with the label
     ngModel.$setViewValue(this.replace(choice));
