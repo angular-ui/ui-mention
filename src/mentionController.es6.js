@@ -184,7 +184,7 @@ angular.module('ui.mention')
     }
 
     // Add the mention, unless its already been mentioned
-    if(this.mentions.indexOf(choice < 0)) {
+    if(this.mentions.indexOf(choice) < 0) {
       this.mentions.push(choice);
     }
 
