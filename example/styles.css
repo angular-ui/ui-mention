@@ -18,7 +18,7 @@ textarea[ui-mention] {
   z-index: 2;
   position: relative; }
   textarea[ui-mention][ui-mention] {
-    background: transparent; }
+    background: rgba(0, 0, 0, 0); }
 
 a {
   color: blue;
@@ -39,9 +39,9 @@ a {
   border: 1px;
   padding: 2px;
   z-index: 1;
-  color: transparent;
+  color: rgba(0, 0, 0, 0);
   white-space: pre-wrap;
-  border: 1px solid transparent;
+  border: 1px solid rgba(0, 0, 0, 0);
   width: 100%; }
   .mention-highlight span {
     border-radius: 3px;
