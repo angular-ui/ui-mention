@@ -27,22 +27,36 @@ var paths = {
   }
 };
 
-gulp.task('default', ['scripts']);
+gulp.task('scripts', scripts(paths.scripts));
+gulp.task('scripts:example', scripts(paths.example.scripts));
 
-gulp.task('example', ['scripts:example', 'styles:example']);
+gulp.task('styles', styles(paths.styles));
+gulp.task('styles:example', styles(paths.example.styles));
+
+gulp.task('default', gulp.series('scripts'));
+gulp.task('example', gulp.series('scripts:example', 'styles:example'));
 
 gulp.task('watch', function(){
-  gulp.watch(paths.scripts.src, ['scripts']);
-  gulp.watch(paths.styles.src, ['styles']);
+  gulp.watch(paths.scripts.src, gulp.series('scripts'));
+  gulp.watch(paths.styles.src, gulp.series('styles'));
 });
 
 gulp.task('watch:example', function(){
-  gulp.watch(paths.example.scripts.src, ['scripts:example']);
-  gulp.watch(paths.example.styles.src, ['styles:example']);
+  gulp.watch(paths.example.scripts.src, gulp.series('scripts:example'));
+  gulp.watch(paths.example.styles.src, gulp.series('styles:example'));
 });
 
-gulp.task('scripts', scripts(paths.scripts));
-gulp.task('scripts:example', scripts(paths.example.scripts));
+gulp.task('karma', karma());
+gulp.task('watch:karma', karma({ singleRun: false, autoWatch: true }));
+function karma (opts) {
+  opts = opts || {};
+  opts.configFile = __dirname + '/karma.conf.js';
+
+  return function (done) {
+    return new Karma(opts, done).start();
+  }
+}
+
 function scripts(path, concat) {
   return function() {
     return gulp.src(path.src)
@@ -59,8 +73,6 @@ function scripts(path, concat) {
   }
 }
 
-gulp.task('styles', styles(paths.styles));
-gulp.task('styles:example', styles(paths.example.styles));
 function styles(path) {
   return function() {
     return gulp.src(path.src)
@@ -68,16 +80,5 @@ function styles(path) {
       .pipe(plugins.sass())
       .pipe(gulp.dest(path.dest))
       .pipe(plugins.sourcemaps.write('.'));
-  }
-}
-
-gulp.task('karma', karma());
-gulp.task('watch:karma', karma({ singleRun: false, autoWatch: true }));
-function karma (opts) {
-  opts = opts || {};
-  opts.configFile = __dirname + '/karma.conf.js';
-
-  return function (done) {
-    return new Karma(opts, done).start();
   }
 }

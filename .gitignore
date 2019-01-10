@@ -29,3 +29,4 @@ bower_components
 
 #editors
 .idea
+.vscode
