@@ -33,7 +33,7 @@ angular.module('ui.mention')
       // Removes any mentions that aren't used
       this.mentions = this.mentions.filter( mention => {
        if (~value.indexOf(this.label(mention)))
-          return value = value.replace(this.label(mention), this.encode(mention));
+          return value = value.replace(new RegExp(escapeRegExp(this.label(mention)), 'g'), this.encode(mention));
       });
 
       this.render(value);
@@ -48,7 +48,7 @@ angular.module('ui.mention')
       // Removes any mentions that aren't used
       this.mentions = this.mentions.filter( mention => {
         if (~value.indexOf(this.encode(mention))) {
-          value = value.replace(this.encode(mention), this.label(mention));
+          value = value.replace(new RegExp(escapeRegExp(this.encode(mention)), 'g'), this.label(mention));
           return true;
         } else {
           return false;
@@ -75,6 +75,10 @@ angular.module('ui.mention')
     }
   }
 
+  function escapeRegExp(string) {
+    return string.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+  }
+
   /**
    * $mention.render()
    *
@@ -87,8 +91,8 @@ angular.module('ui.mention')
     html = (html || '').toString();
     // Convert input to text, to prevent script injection/rich text
     html = parseContentAsText(html);
-    this.mentions.forEach( mention => {
-      html = html.replace(this.encode(mention), this.highlight(mention));
+    this.mentions.forEach(mention => {
+      html = html.replace(new RegExp(escapeRegExp(this.encode(mention)), 'g'), this.highlight(mention));
     });
     this.renderElement().html(html);
     return html;
@@ -183,8 +187,12 @@ angular.module('ui.mention')
       return false;
     }
 
+    let mentionExists = this.mentions.map(mention => mention.id).indexOf(choice.id) !== -1;
+
     // Add the mention
-    this.mentions.push(choice);
+    if (!mentionExists) {
+      this.mentions.push(choice);
+    }
 
     // Replace the search with the label
     ngModel.$setViewValue(this.replace(choice));

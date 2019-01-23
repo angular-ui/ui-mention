@@ -53,7 +53,7 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
     ngModel.$parsers.push(function (value) {
       // Removes any mentions that aren't used
       _this.mentions = _this.mentions.filter(function (mention) {
-        if (~value.indexOf(_this.label(mention))) return value = value.replace(_this.label(mention), _this.encode(mention));
+        if (~value.indexOf(_this.label(mention))) return value = value.replace(new RegExp(escapeRegExp(_this.label(mention)), 'g'), _this.encode(mention));
       });
 
       _this.render(value);
@@ -70,7 +70,7 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
       // Removes any mentions that aren't used
       _this.mentions = _this.mentions.filter(function (mention) {
         if (~value.indexOf(_this.encode(mention))) {
-          value = value.replace(_this.encode(mention), _this.label(mention));
+          value = value.replace(new RegExp(escapeRegExp(_this.encode(mention)), 'g'), _this.label(mention));
           return true;
         } else {
           return false;
@@ -97,6 +97,10 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
     }
   }
 
+  function escapeRegExp(string) {
+    return string.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+  }
+
   /**
    * $mention.render()
    *
@@ -112,7 +116,7 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
     // Convert input to text, to prevent script injection/rich text
     html = parseContentAsText(html);
     _this2.mentions.forEach(function (mention) {
-      html = html.replace(_this2.encode(mention), _this2.highlight(mention));
+      html = html.replace(new RegExp(escapeRegExp(_this2.encode(mention)), 'g'), _this2.highlight(mention));
     });
     _this2.renderElement().html(html);
     return html;
@@ -212,8 +216,14 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
       return false;
     }
 
+    var mentionExists = this.mentions.map(function (mention) {
+      return mention.id;
+    }).indexOf(choice.id) !== -1;
+
     // Add the mention
-    this.mentions.push(choice);
+    if (!mentionExists) {
+      this.mentions.push(choice);
+    }
 
     // Replace the search with the label
     ngModel.$setViewValue(this.replace(choice));
