@@ -1,10 +1,10 @@
 angular.module('ui.mention', [])
-.directive('uiMention', function() {
+.directive('uiMention', function () {
   return {
     require: ['ngModel', 'uiMention'],
     controller: 'uiMention',
     controllerAs: '$mention',
-    link: function($scope, $element, $attrs, [ngModel, uiMention]) {
+    link: function ($scope, $element, $attrs, [ngModel, uiMention]) {
       uiMention.init(ngModel);
     }
   };
