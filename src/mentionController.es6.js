@@ -169,6 +169,9 @@ angular.module('ui.mention')
   this.replace = function(mention, search = this.searching, text = ngModel.$viewValue) {
     // TODO: come up with a better way to detect what to remove
     // TODO: consider alternative to using regex match
+    if (search === null) {
+      return text;
+    }
     text = text.substr(0, search.index + search[0].indexOf(this.delimiter)) +
            this.label(mention) + ' ' +
            text.substr(search.index + search[0].length);
