@@ -32,8 +32,9 @@ $element, $scope, $attrs, $q, $timeout, $document
     ngModel.$parsers.push(value => {
       // Removes any mentions that aren't used
       this.mentions = this.mentions.filter((mention) => {
-       if (~value.indexOf(this.label(mention)))
-          return value = value.replace(getEscapedRegExp(this.label(mention)), this.encode(mention));
+       if (~value.indexOf(this.label(mention))) {
+          return value = value.split(this.label(mention)).join(this.encode(mention));
+       }
       });
 
       this.render(value);
@@ -48,7 +49,7 @@ $element, $scope, $attrs, $q, $timeout, $document
       // Removes any mentions that aren't used
       this.mentions = this.mentions.filter((mention) => {
         if (~value.indexOf(this.encode(mention))) {
-          value = value.replace(getEscapedRegExp(this.encode(mention)), this.label(mention));
+          value = value.split(this.encode(mention)).join(this.label(mention));
           return true;
         } else {
           return false;
@@ -75,13 +76,6 @@ $element, $scope, $attrs, $q, $timeout, $document
     }
   }
 
-  function getEscapedRegExp(string) {
-    // escape RegExp
-    string = string.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-
-    return new RegExp(string, 'g');
-  }
-
   /**
    * $mention.render()
    *
@@ -95,7 +89,7 @@ $element, $scope, $attrs, $q, $timeout, $document
     // Convert input to text, to prevent script injection/rich text
     html = parseContentAsText(html);
     this.mentions.forEach((mention) => {
-      html = html.replace(getEscapedRegExp(this.encode(mention)), this.highlight(mention));
+      html = html.split(this.encode(mention)).join(this.highlight(mention));
     });
     this.renderElement().html(html);
     return html;
@@ -193,9 +187,9 @@ $element, $scope, $attrs, $q, $timeout, $document
       return false;
     }
 
-    let mentionExists = this.mentions.map(mention => mention.id).indexOf(choice.id) !== -1;
+    const mentionExists = ~this.mentions.map(mention => mention.id).indexOf(choice.id);
 
-    // Add the mention
+    // Add the mention, unless its already been mentioned
     if (!mentionExists) {
       this.mentions.push(choice);
     }

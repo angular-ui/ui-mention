@@ -51,7 +51,9 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
     ngModel.$parsers.push(function (value) {
       // Removes any mentions that aren't used
       _this.mentions = _this.mentions.filter(function (mention) {
-        if (~value.indexOf(_this.label(mention))) return value = value.replace(getEscapedRegExp(_this.label(mention)), _this.encode(mention));
+        if (~value.indexOf(_this.label(mention))) {
+          return value = value.split(_this.label(mention)).join(_this.encode(mention));
+        }
       });
 
       _this.render(value);
@@ -68,7 +70,7 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
       // Removes any mentions that aren't used
       _this.mentions = _this.mentions.filter(function (mention) {
         if (~value.indexOf(_this.encode(mention))) {
-          value = value.replace(getEscapedRegExp(_this.encode(mention)), _this.label(mention));
+          value = value.split(_this.encode(mention)).join(_this.label(mention));
           return true;
         } else {
           return false;
@@ -95,13 +97,6 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
     }
   }
 
-  function getEscapedRegExp(string) {
-    // escape RegExp
-    string = string.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-
-    return new RegExp(string, 'g');
-  }
-
   /**
    * $mention.render()
    *
@@ -117,7 +112,7 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
     // Convert input to text, to prevent script injection/rich text
     html = parseContentAsText(html);
     _this.mentions.forEach(function (mention) {
-      html = html.replace(getEscapedRegExp(_this.encode(mention)), _this.highlight(mention));
+      html = html.split(_this.encode(mention)).join(_this.highlight(mention));
     });
     _this.renderElement().html(html);
     return html;
@@ -220,11 +215,11 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
       return false;
     }
 
-    var mentionExists = _this.mentions.map(function (mention) {
+    var mentionExists = ~_this.mentions.map(function (mention) {
       return mention.id;
-    }).indexOf(choice.id) !== -1;
+    }).indexOf(choice.id);
 
-    // Add the mention
+    // Add the mention, unless its already been mentioned
     if (!mentionExists) {
       _this.mentions.push(choice);
     }
