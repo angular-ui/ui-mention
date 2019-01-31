@@ -170,9 +170,30 @@ describe('uiMention', () => {
         });
 
         it('updates the HTML content of the adjacent DOM element', () => {
-          ngModel.$modelValue = '@[foo bar:1]';
-          ngModel.$render();
-          expect($element.next().html()).to.eq('<span>foo bar</span>');
+          let testCases = [
+            {
+              $modelValue: '@[foo bar:1]',
+              expected: '<span>foo bar</span>'
+            },
+            {
+              $modelValue: '@[foo bar:1] @[foo bar:1]',
+              expected: '<span>foo bar</span> <span>foo bar</span>'
+            },
+            {
+              $modelValue: '@[foo bar:1] @[k v:2] @[foo bar:1]',
+              expected: '<span>foo bar</span> <span>k v</span> <span>foo bar</span>'
+            },
+            {
+              $modelValue: '@[foo bar:1] @[k v:2] @[foo bar:1] @[k v:2]',
+              expected: '<span>foo bar</span> <span>k v</span> <span>foo bar</span> <span>k v</span>'
+            }
+          ];
+
+          testCases.forEach(testCase => {
+            ngModel.$modelValue = testCase.$modelValue;
+            ngModel.$render();
+            expect($element.next().html()).to.eq(testCase.expected);
+          });
         });
       });
     });
@@ -202,8 +223,29 @@ describe('uiMention', () => {
       });
 
       it('converts a syntax encoded string to HTML', () => {
-        ngModel.$modelValue = '@[foo bar:1] @[k v:2]';
-        expect(ctrlInstance.render()).to.eq('<span>foo bar</span> <span>k v</span>');
+        let testCases = [
+          {
+            $modelValue: '@[foo bar:1] @[k v:2]',
+            expected: '<span>foo bar</span> <span>k v</span>'
+          },
+          {
+            $modelValue: '@[foo bar:1] @[foo bar:1]',
+            expected: '<span>foo bar</span> <span>foo bar</span>'
+          },
+          {
+            $modelValue: '@[foo bar:1] @[k v:2] @[foo bar:1]',
+            expected: '<span>foo bar</span> <span>k v</span> <span>foo bar</span>'
+          },
+          {
+            $modelValue: '@[foo bar:1] @[k v:2] @[foo bar:1] @[k v:2]',
+            expected: '<span>foo bar</span> <span>k v</span> <span>foo bar</span> <span>k v</span>'
+          }
+        ];
+
+        testCases.forEach(testCase => {
+          ngModel.$modelValue = testCase.$modelValue;
+          expect(ctrlInstance.render()).to.eq(testCase.expected);
+        });
       });
 
       it('does not convert non-mentions', () => {
@@ -216,9 +258,9 @@ describe('uiMention', () => {
       });
 
       it('replaces the html of $element.next with the converted value', () => {
-        ngModel.$modelValue = '@[foo bar:1] @[k v:2]';
+        ngModel.$modelValue = '@[foo bar:1] @[k v:2] @[foo bar:1]';
         ctrlInstance.render();
-        expect(ctrlInstance.renderElement().html()).to.eq('<span>foo bar</span> <span>k v</span>')
+        expect(ctrlInstance.renderElement().html()).to.eq('<span>foo bar</span> <span>k v</span> <span>foo bar</span>')
       });
     });
 
@@ -267,8 +309,15 @@ describe('uiMention', () => {
 
       it('adds a mention to the current mentions', () => {
         expect(ctrlInstance.mentions.length).to.eq(0);
-        ctrlInstance.select({ first: 'foo', last: 'bar' });
-        expect(ctrlInstance.mentions[0]).to.eql({ first: 'foo', last: 'bar' });
+        ctrlInstance.select({ id: 1, first: 'foo', last: 'bar' });
+        expect(ctrlInstance.mentions[0]).to.eql({ id: 1, first: 'foo', last: 'bar' });
+
+        ctrlInstance.select({ id: 1, first: 'foo', last: 'bar' });
+        expect(ctrlInstance.mentions.length).to.eq(1);
+
+        ctrlInstance.select({ id: 2, first: 'k', last: 'v' });
+        expect(ctrlInstance.mentions.length).to.eq(2);
+        expect(ctrlInstance.mentions[1]).to.eql({ id: 2, first: 'k', last: 'v' });
       });
 
       it('clears the controller choices', () => {

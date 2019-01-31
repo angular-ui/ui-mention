@@ -1,6 +1,6 @@
 angular.module('ui.mention')
 .controller('uiMention', function (
-  $element, $scope, $attrs, $q, $timeout, $document
+$element, $scope, $attrs, $q, $timeout, $document
 ) {
 
   // Beginning of input or preceeded by spaces: @sometext
@@ -23,17 +23,18 @@ angular.module('ui.mention')
    *
    * @param  {ngModelController} model
    */
-  this.init = function(model) {
+  this.init = (model) => {
     // Leading whitespace shows up in the textarea but not the preview
     $attrs.ngTrim = 'false';
 
     ngModel = model;
 
-    ngModel.$parsers.push( value => {
+    ngModel.$parsers.push(value => {
       // Removes any mentions that aren't used
-      this.mentions = this.mentions.filter( mention => {
-       if (~value.indexOf(this.label(mention)))
-          return value = value.replace(this.label(mention), this.encode(mention));
+      this.mentions = this.mentions.filter((mention) => {
+       if (~value.indexOf(this.label(mention))) {
+          return value = value.split(this.label(mention)).join(this.encode(mention));
+       }
       });
 
       this.render(value);
@@ -41,14 +42,14 @@ angular.module('ui.mention')
       return value;
     });
 
-    ngModel.$formatters.push( (value = '') => {
+    ngModel.$formatters.push((value = '') => {
       // In case the value is a different primitive
       value = value.toString();
 
       // Removes any mentions that aren't used
-      this.mentions = this.mentions.filter( mention => {
+      this.mentions = this.mentions.filter((mention) => {
         if (~value.indexOf(this.encode(mention))) {
-          value = value.replace(this.encode(mention), this.label(mention));
+          value = value.split(this.encode(mention)).join(this.label(mention));
           return true;
         } else {
           return false;
@@ -87,8 +88,8 @@ angular.module('ui.mention')
     html = (html || '').toString();
     // Convert input to text, to prevent script injection/rich text
     html = parseContentAsText(html);
-    this.mentions.forEach( mention => {
-      html = html.replace(this.encode(mention), this.highlight(mention));
+    this.mentions.forEach((mention) => {
+      html = html.split(this.encode(mention)).join(this.highlight(mention));
     });
     this.renderElement().html(html);
     return html;
@@ -113,7 +114,7 @@ angular.module('ui.mention')
    * @param  {mixed|object} choice The choice to be highlighted
    * @return {string}              HTML highlighted version of the choice
    */
-  this.highlight = function(choice) {
+  this.highlight = (choice) => {
     return `<span>${this.label(choice)}</span>`;
   };
 
@@ -124,7 +125,7 @@ angular.module('ui.mention')
    * @param  {string} [text] syntax encoded string (default: ngModel.$modelValue)
    * @return {string}        plaintext string with encoded labels used
    */
-  this.decode = function(value = ngModel.$modelValue) {
+  this.decode = (value = ngModel.$modelValue) => {
     return value ? value.replace(this.decodePattern, '$1') : '';
   };
 
@@ -136,7 +137,7 @@ angular.module('ui.mention')
    * @param  {mixed|object} choice The choice to be rendered
    * @return {string}              Human-readable string version of choice
    */
-  this.label = function(choice) {
+  this.label = (choice) => {
     return `${choice.first} ${choice.last}`;
   };
 
@@ -148,7 +149,7 @@ angular.module('ui.mention')
    * @param  {mixed|object} choice The choice to be encoded
    * @return {string}              Syntax-encoded string version of choice
    */
-  this.encode = function(choice) {
+  this.encode = (choice) => {
     return `${this.delimiter}[${this.label(choice)}:${choice.id}]`;
   };
 
@@ -162,9 +163,12 @@ angular.module('ui.mention')
    * @param  {string} [text]         String to perform the replacement on (default: ngModel.$viewValue)
    * @return {string}                Human-readable string
    */
-  this.replace = function(mention, search = this.searching, text = ngModel.$viewValue) {
+  this.replace = (mention, search = this.searching, text = ngModel.$viewValue) => {
     // TODO: come up with a better way to detect what to remove
     // TODO: consider alternative to using regex match
+    if (search === null) {
+      return text;
+    }
     text = text.substr(0, search.index + search[0].indexOf(this.delimiter)) +
            this.label(mention) + ' ' +
            text.substr(search.index + search[0].length);
@@ -178,13 +182,17 @@ angular.module('ui.mention')
    *
    * @param  {mixed|object} [choice] The selected choice (default: activeChoice)
    */
-  this.select = function(choice = this.activeChoice) {
+  this.select = (choice = this.activeChoice) => {
     if (!choice) {
       return false;
     }
 
-    // Add the mention
-    this.mentions.push(choice);
+    const mentionExists = ~this.mentions.map(mention => mention.id).indexOf(choice.id);
+
+    // Add the mention, unless its already been mentioned
+    if (!mentionExists) {
+      this.mentions.push(choice);
+    }
 
     // Replace the search with the label
     ngModel.$setViewValue(this.replace(choice));
@@ -201,7 +209,7 @@ angular.module('ui.mention')
    *
    * Moves this.activeChoice up the this.choices collection
    */
-  this.up = function() {
+  this.up = () => {
     let index = this.choices.indexOf(this.activeChoice);
     if (index > 0) {
       this.activeChoice = this.choices[index - 1];
@@ -215,7 +223,7 @@ angular.module('ui.mention')
    *
    * Moves this.activeChoice down the this.choices collection
    */
-  this.down = function() {
+  this.down = () => {
     let index = this.choices.indexOf(this.activeChoice);
     if (index < this.choices.length - 1) {
       this.activeChoice = this.choices[index + 1];
@@ -233,11 +241,11 @@ angular.module('ui.mention')
    * @param  {regex.exec()} match The trigger-text regex match object
    * @todo Try to avoid using a regex match object
    */
-  this.search = function(match) {
+  this.search = (match) => {
     this.searching = match;
 
-    return $q.when( this.findChoices(match, this.mentions) )
-      .then( choices => {
+    return $q.when(this.findChoices(match, this.mentions))
+      .then((choices) => {
         this.choices = choices;
         this.activeChoice = choices[0];
         return choices;
@@ -252,7 +260,7 @@ angular.module('ui.mention')
    * @todo Make it easier to override this
    * @return {array[choice]|Promise} The list of possible choices
    */
-  this.findChoices = function(match, mentions) {
+  this.findChoices = (match, mentions) => {
     return [];
   };
 
@@ -261,26 +269,29 @@ angular.module('ui.mention')
    *
    * Clears the choices dropdown info and stops searching
    */
-  this.cancel = function() {
+  this.cancel = () => {
     this.choices = [];
     this.searching = null;
   };
 
-  this.autogrow = function() {
+  this.autogrow = () => {
     $element[0].style.height = 0; // autoshrink - need accurate scrollHeight
     let style = getComputedStyle($element[0]);
-    if (style.boxSizing == 'border-box')
-    $element[0].style.height = $element[0].scrollHeight + 'px';
+    if (style.boxSizing == 'border-box') {
+      $element[0].style.height = $element[0].scrollHeight + 'px';
+    }
   };
 
   // Interactions to trigger searching
-  $element.on('keyup click focus', event => {
+  $element.on('keyup click focus', (event) => {
     // If event is fired AFTER activeChoice move is performed
-    if (this.moved)
+    if (this.moved) {
       return this.moved = false;
+    }
     // Don't trigger on selection
-    if ($element[0].selectionStart != $element[0].selectionEnd)
+    if ($element[0].selectionStart != $element[0].selectionEnd) {
       return;
+    }
     let text = $element.val();
     // text to left of cursor ends with `@sometext`
     let match = this.searchPattern.exec(text.substr(0, $element[0].selectionStart));
@@ -296,9 +307,10 @@ angular.module('ui.mention')
     }
   });
 
-  $element.on('keydown', event => {
-    if (!this.searching)
+  $element.on('keydown', (event) => {
+    if (!this.searching) {
       return;
+    }
 
     switch (event.keyCode) {
       case 13: // return
@@ -323,22 +335,24 @@ angular.module('ui.mention')
     }
   });
 
-  this.onMouseup = (function(event) {
-    if (event.target == $element[0])
+  this.onMouseup = (function (event) {
+    if (event.target == $element[0]) {
       return
+    }
 
     $document.off('mouseup', this.onMouseup);
 
-    if (!this.searching)
+    if (!this.searching) {
       return;
+    }
 
     // Let ngClick fire first
-    $scope.$evalAsync( () => {
+    $scope.$evalAsync(() => {
       this.cancel();
     });
   }).bind(this);
 
-  $element.on('focus', event => {
+  $element.on('focus', (event) => {
     $document.on('mouseup', this.onMouseup);
   });
 
