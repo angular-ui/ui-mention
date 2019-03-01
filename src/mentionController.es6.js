@@ -187,7 +187,8 @@ $element, $scope, $attrs, $q, $timeout, $document
       return false;
     }
 
-    const mentionExists = ~this.mentions.map(mention => mention.id).indexOf(choice.id);
+    const mentionExists = this.mentions
+      .some(mention => this.encode(mention) === this.encode(choice));
 
     // Add the mention, unless its already been mentioned
     if (!mentionExists) {

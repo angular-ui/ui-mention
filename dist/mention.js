@@ -215,9 +215,9 @@ angular.module('ui.mention').controller('uiMention', ["$element", "$scope", "$at
       return false;
     }
 
-    var mentionExists = ~_this.mentions.map(function (mention) {
-      return mention.id;
-    }).indexOf(choice.id);
+    var mentionExists = _this.mentions.some(function (mention) {
+      return _this.encode(mention) === _this.encode(choice);
+    });
 
     // Add the mention, unless its already been mentioned
     if (!mentionExists) {
